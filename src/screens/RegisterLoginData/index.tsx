@@ -47,7 +47,14 @@ export function RegisterLoginData() {
     const dataKey = '@savepass:logins';
 
     // Save data on AsyncStorage and navigate to 'Home' screen
-    await AsyncStorage.setItem(dataKey, JSON.stringify(newLoginData));
+    const oldData = await AsyncStorage.getItem(dataKey);
+
+    if (oldData) {
+      const newData = [...JSON.parse(oldData), newLoginData];
+      await AsyncStorage.setItem(dataKey, JSON.stringify(newData));
+    } else {
+      await AsyncStorage.setItem(dataKey, JSON.stringify([newLoginData]));
+    }
     navigate('Home');
   }
 
